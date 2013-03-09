@@ -1,0 +1,44 @@
+{
+	"name": "xlrd-parser",
+	"version": "0.0.1",
+	"main": "./lib/xlrd",
+	"description": "High performance XLS/XLSX parser based on xlrd library from www.python-excel.org.",
+	"keywords": [
+		"excel",
+		"xls",
+		"xlsx",
+		"parse",
+		"parsing",
+		"xlrd",
+		"python-excel"
+	],
+	"scripts": {
+		"test": "mocha tests/test.js",
+		"install": "bash install.sh"
+	},
+	"dependencies": {
+		"underscore": "1.4.x"
+	},
+	"devDependencies": {
+		"mocha": "*",
+		"chai": "*"
+	},
+	"repository": {
+		"type": "git",
+		"path": "git://github.com/extrabacon/xlrd-parser"
+	},
+	"homepage": "http://github.com/extrabacon/xlrd-parser",
+	"bugs": "http://github.com/extrabacon/xlrd-parser/issues",
+	"author": {
+		"name": "Nicolas Mercier",
+		"email": "nicolas@extrabacon.net"
+	},
+	"licenses": [
+		{
+			"type": "MIT"
+		}
+	],
+	"engines": {
+		"node": ">=0.8"
+	}
+}
