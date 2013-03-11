@@ -70,6 +70,11 @@ xlrd.stream('myfile.xlsx').on('open', function (workbook) {
 });
 ```
 
+## Compatibility
+
++ Tested on Mac OS X 10.8
++ Tested on Ubuntu Linux 12.04 (requires prior installation of curl: apt-get install curl)
+
 ## Limitations
 
 + Cannot parse file selectively (will be addressed in a future release)
