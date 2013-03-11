@@ -101,7 +101,13 @@ if __name__ == "__main__":
             sh = bk.sheet_by_index(shx)
             nrows, ncols = sh.nrows, sh.ncols
             colrange = range(ncols)
-            print(json.dumps([ "sheet", { "index": shx, "name": sh.name, "rowcount": sh.nrows, "colcount": sh.ncols }]))
+            print(json.dumps([ "sheet", {
+                "index": shx,
+                "name": sh.name,
+                "rows": sh.nrows,
+                "cols": sh.ncols,
+                "visibility": sh.visibility
+            }]))
             if nrows and ncols:
                 # Beat the bounds
                 for rowx in xrange(nrows):
@@ -223,7 +229,10 @@ if __name__ == "__main__":
                         ragged_rows=options.ragged_rows,
                         )
                     t1 = time.time()
-                    print(json.dumps(["workbook", fname]))
+                    print(json.dumps(["workbook", { "file": fname, "user": bk.user_name, "sheets": { 
+                        "count": bk.nsheets,
+                        "names": bk.sheet_names()
+                    }}]))
                 except xlrd.XLRDError:
                     e0, e1 = sys.exc_info()[:2]
                     print(json.dumps(["error", {

@@ -13,13 +13,14 @@
 		"python-excel"
 	],
 	"scripts": {
-		"test": "mocha tests/test.js",
+		"test": "mocha tests/tests.js",
 		"install": "bash install.sh"
 	},
 	"dependencies": {
 		"underscore": "1.4.x"
 	},
 	"devDependencies": {
+		"async": "*",
 		"mocha": "*",
 		"chai": "*"
 	},
