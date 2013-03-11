@@ -72,15 +72,25 @@ xlrd.stream('myfile.xlsx').on('open', function (workbook) {
 
 ## Compatibility
 
++ Tested with Node 0.8
 + Tested on Mac OS X 10.8
 + Tested on Ubuntu Linux 12.04 (requires prior installation of curl: apt-get install curl)
+
+## Dependencies
+
++ Python version 2.6+
++ xlrd version 0.7.4+
++ underscore.js
++ bash (installation script)
++ curl (installation script)
+
+Windows platform is not yet supported. I will accept contributions for an alternate install script that will also work
+on Windows.
 
 ## Limitations
 
 + Cannot parse file selectively (will be addressed in a future release)
 + Does not parse formatting info (might be addressed in a future release)
-+ Requires the Python shell (version 2.6+)
-+ Requires a bash script to install the xlrd dependency (will not work on Windows)
 
 ## Thanks
 
