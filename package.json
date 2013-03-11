@@ -1,8 +1,8 @@
 {
 	"name": "xlrd-parser",
 	"version": "0.0.1",
-	"main": "./lib/xlrd",
-	"description": "High performance XLS/XLSX parser based on xlrd library from www.python-excel.org.",
+	"main": "lib/xlrd",
+	"description": "High performance XLS/XLSX parser based on the xlrd library from www.python-excel.org.",
 	"keywords": [
 		"excel",
 		"xls",
