@@ -24,7 +24,10 @@
 		"mocha": "*",
 		"chai": "*"
 	},
-	"repository": "http://github.com/extrabacon/xlrd-parser",
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/extrabacon/xlrd-parser"
+	},
 	"homepage": "http://github.com/extrabacon/xlrd-parser",
 	"bugs": "http://github.com/extrabacon/xlrd-parser/issues",
 	"author": {
