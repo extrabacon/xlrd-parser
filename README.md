@@ -1,7 +1,7 @@
 # xlrd-parser
 
 High performance XLS/XLSX parser based on the xlrd library from [www.python-excel.org](www.python-excel.org) for
-reading Excel files from all versions and all sizes.
+efficiently reading Excel files from all versions and all sizes.
 
 This module interfaces with a Python shell to stream JSON fragments from stdout. It is not a port of xlrd from Python to
 Javascript (which is surely possible) and it does not use native bindings.
