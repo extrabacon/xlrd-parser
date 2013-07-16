@@ -75,10 +75,10 @@ xlrd.stream('myfile.xlsx').on('open', function (workbook) {
 
 An object can be passed to the `parse` and `stream` methods to define additional options.
 
-* `meta` - loads only workbook metadata, without iterating on rows (Boolean)
-* `sheets` - loads sheets selectively, either by name or by index (String, Number or Array)
-* `maxRows` - the maximum number of rows to load per sheet (Number)
-* `debug` - outputs JSON from the xlrd-parser child process (Boolean)
+* `meta` - loads only workbook metadata, without iterating on rows - `Boolean`
+* `sheets` - loads sheets selectively, either by name or by index - `String`, `Number` or `Array`
+* `maxRows` - the maximum number of rows to load per sheet - `Number`
+* `debug` - outputs JSON from the xlrd-parser child process - `Boolean`
 
 #### Examples:
 
@@ -90,7 +90,7 @@ xlrd.parse('myfile.xlsx', { meta: true }, function (err, workbook) {
 });
 ```
 
-Load the first 10 rows from the first sheet
+Load only the first 10 rows from the first sheet
 
 ```javascript
 xlrd.parse('myfile.xlsx', { sheets: 0, maxRows: 10 }, function (err, workbook) {
@@ -120,13 +120,13 @@ var stream = xlrd.stream('myfile.xlsx', { sheets: 'products' });
 
 Windows platform is not yet supported, but it is only a matter of converting the installation script to PowerShell.
 A Python shell also needs to be available from the command line, which could be installed via
-[http://chocolatey.org/packages/python](chocolatey).
+[chocolatey](http://chocolatey.org/packages/python).
 
 ## Changelog
 
 ### 0.1.0
 
-+ can probe a workbook for metadata, without iterating any row (options.meta)
++ can probe a workbook for metadata, without iterating on rows (options.meta)
 + can specify which sheet to load, either by name or by index (options.sheets)
 + can specify maximum number of rows to load (options.maxRows)
 + parsing of errors, such as #DIV/0!, #NAME? or #VALUE!
