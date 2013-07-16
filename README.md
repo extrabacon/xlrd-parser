@@ -1,17 +1,18 @@
 # xlrd-parser
 
-High performance XLS/XLSX parser based on the xlrd library from [www.python-excel.org](www.python-excel.org) for
-efficiently reading Excel files from all versions and all sizes.
+High performance Excel file parser based on the xlrd library from [www.python-excel.org](www.python-excel.org) for
+reading Excel files in XLS or XLSX formats.
 
-This module interfaces with a Python shell to stream JSON fragments from stdout. It is not a port of xlrd from Python to
-Javascript (which is surely possible) and it does not use native bindings.
+This module interfaces with a Python shell to stream JSON from stdout using a child process. It is not a port of xlrd
+from Python to Javascript (which is surely possible).
 
 ## Features
 
 + Much faster and more memory efficient than most alternatives
 + Support for both XLS and XLSX formats
 + Can read multiple sheets
-+ Can efficiently stream large files (tested with 250K+ rows)
++ Can load data selectively
++ Can stream large files (tested with 250K+ rows)
 
 ## Documentation
 
@@ -42,7 +43,7 @@ xlrd.parse('myfile.xlsx', function (err, workbook) {
 });
 ```
 
-Cell values are accurately parsed as native strings, numbers and dates.
+Cell values are parsed as strings, numbers and dates depending on the cell format.
 
 For more details on the API, see the included unit tests.
 
@@ -59,7 +60,7 @@ xlrd.stream('myfile.xlsx').on('open', function (workbook) {
 
 	var currentWorkbook = data.workbook,
 		currentSheet = data.sheet,
-		rows = data.rows;
+		batchOfRows = data.rows;
 
 	// TODO: handle streaming logic here
 
@@ -70,9 +71,42 @@ xlrd.stream('myfile.xlsx').on('open', function (workbook) {
 });
 ```
 
+### Options
+
+An object can be passed to the `parse` and `stream` methods to define additional options.
+
+* `meta` - loads only workbook metadata, without iterating on rows (Boolean)
+* `sheets` - loads sheets selectively, either by name or by index (String, Number or Array)
+* `maxRows` - the maximum number of rows to load per sheet (Number)
+* `debug` - outputs JSON from the xlrd-parser child process (Boolean)
+
+#### Examples:
+
+Output sheet names without loading any data
+
+```javascript
+xlrd.parse('myfile.xlsx', { meta: true }, function (err, workbook) {
+  console.log(workbook.meta.sheets);
+});
+```
+
+Load the first 10 rows from the first sheet
+
+```javascript
+xlrd.parse('myfile.xlsx', { sheets: 0, maxRows: 10 }, function (err, workbook) {
+  // workbook will contain only the first sheet
+});
+```
+
+Load only a sheet named 'products'
+
+```javascript
+var stream = xlrd.stream('myfile.xlsx', { sheets: 'products' });
+```
+
 ## Compatibility
 
-+ Tested with Node 0.8
++ Tested with Node 0.10.x
 + Tested on Mac OS X 10.8
 + Tested on Ubuntu Linux 12.04 (requires prior installation of curl: apt-get install curl)
 
@@ -84,13 +118,31 @@ xlrd.stream('myfile.xlsx').on('open', function (workbook) {
 + bash (installation script)
 + curl (installation script)
 
-Windows platform is not yet supported. I will accept contributions for an alternate install script that will also work
-on Windows.
+Windows platform is not yet supported, but it is only a matter of converting the installation script to PowerShell.
+A Python shell also needs to be available from the command line, which could be installed via
+[http://chocolatey.org/packages/python](chocolatey).
+
+## Changelog
+
+### 0.1.0
+
++ can probe a workbook for metadata, without iterating any row (options.meta)
++ can specify which sheet to load, either by name or by index (options.sheets)
++ can specify maximum number of rows to load (options.maxRows)
++ parsing of errors, such as #DIV/0!, #NAME? or #VALUE!
++ added JSDoc comments
++ simplified and optimized Python script, emitted JSON is more compact which should further reduce memory footprint
++ sheets are now loaded on-demand
++ better error handling
+
+### 0.0.1
+
++ initial release
+
 
 ## Limitations
 
-+ Cannot parse file selectively (will be addressed in a future release)
-+ Does not parse formatting info (might be addressed in a future release)
++ Does not parse formatting info (performance impact)
 
 ## Thanks
 
@@ -98,6 +150,10 @@ Many thanks to the authors of the xlrd library ([here](http://github.com/python-
 efficient open-source library I could find.
 
 ## License
+
+The package itself is MIT licenced.
+
+License from xlrd library:
 
 	Portions copyright © 2005-2009, Stephen John Machin, Lingfo Pty Ltd
 	All rights reserved.

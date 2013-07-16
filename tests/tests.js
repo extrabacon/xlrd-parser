@@ -20,9 +20,9 @@ describe('xlrd', function () {
 					expect(workbook).not.be.null;
 					expect(workbook.file).to.equal(file);
 					expect(workbook.meta.user).to.equal('Nicolas Mercier-Gaboury');
-					expect(workbook.meta.sheets.count).to.equal(2);
-					expect(workbook.meta.sheets.names).to.contain('Sheet1').and.to.contain('second sheet');
-					expect(workbook.sheets).to.be.an('array').and.have.length(workbook.meta.sheets.count);
+					expect(workbook.meta.sheets.length).to.equal(2);
+					expect(workbook.meta.sheets).to.contain('Sheet1').and.to.contain('second sheet');
+					expect(workbook.sheets).to.be.an('array').and.have.length(workbook.meta.sheets.length);
 
 					workbook.sheets.forEach(function (sheet, index) {
 						expect(sheet).to.have.property('index', index);
@@ -33,7 +33,7 @@ describe('xlrd', function () {
 						expect(sheet).to.equal(workbook.sheets[index]).and.to.equal(workbook.sheets[sheet.name]);
 
 						if (index === 0) {
-							expect(sheet.bounds).to.have.property('columns', 5);
+							expect(sheet.bounds).to.have.property('columns', 7);
 							expect(sheet.bounds).to.have.property('rows', 51);
 						} else if (index === 1) {
 							expect(sheet.bounds).to.have.property('columns', 3);
@@ -166,7 +166,7 @@ describe('xlrd', function () {
 		it('should fail if the file does not exist', function (done) {
 			xlrd.parse('unknown.xlsx', function (err, workbook) {
 				expect(workbook).to.not.be.ok;
-				expect(err).to.be.an.instanceof(Error).and.have.property('type', 'file_not_found');
+				expect(err).to.be.an.instanceof(Error).and.have.property('id', 'file_not_found');
 				return done();
 			});
 		});
@@ -174,7 +174,7 @@ describe('xlrd', function () {
 		it('should fail if the file is not a valid workbook', function (done) {
 			xlrd.parse('package.json', function (err, workbook) {
 				expect(workbook).to.not.be.ok;
-				expect(err).to.be.an.instanceof(Error).and.have.property('type', 'open_failed');
+				expect(err).to.be.an.instanceof(Error).and.have.property('id', 'open_workbook_failed');
 				return done();
 			});
 		});
