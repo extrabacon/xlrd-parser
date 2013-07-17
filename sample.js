@@ -20,7 +20,7 @@ xlrd.stream('myfile.xlsx').on('open', function (workbook) {
 
 	var currentWorkbook = data.workbook,
 		currentSheet = data.sheet,
-		rows = data.rows;
+		batchOrRows = data.rows;
 
 	// TODO: handle streaming logic here
 
