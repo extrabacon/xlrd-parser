@@ -28,6 +28,9 @@ from Python to Javascript (which is surely possible).
 npm install xlrd-parser
 ```
 
+The xlrd dependency is installed automatically by downloading the latest version from
+[github](http://github.com/python-excel/xlrd).
+
 ### Parsing a file
 
 Parsing a file loads the entire file into an object structure composed of a workbook, sheets, rows and cells.
@@ -118,31 +121,35 @@ xlrd.stream('myfile.xlsx').on('open', function (workbook) {
 
 The `stream` method returns a Node `EventEmitter` instance. Use `on` to listen to events and read the data continuously.
 
-* `open`: fires when a workbook is opened (sheets are not available at this point)
+* `open` - fires when a workbook is opened (sheets are not available at this point)
+
   Arguments: the workbook object
 
-* `data`: fires repeatedly as data is being read from the file
+* `data` - fires repeatedly as data is being read from the file
+
   Arguments: a data object containing the following:
 
   * `workbook`: the current workbook object
   * `sheet`: the current sheet object
   * `rows`: the current batch of rows
 
-* `error`: fires every time an error is encountered while parsing the file, the process is stopped only if a fatal
+* `error` - fires every time an error is encountered while parsing the file, the process is stopped only if a fatal
 error is encountered
+
   Arguments: the error object
 
-* `close`: fires only once, after all files and data have been read
+* `close` - fires only once, after all files and data have been read
+
   Arguments: none
 
 ### Options
 
 An object can be passed to the `parse` and `stream` methods to define additional options.
 
-* `meta`: load only workbook metadata, without iterating on rows - `Boolean`
-* `sheet` || `sheets`: load sheet(s) selectively, either by name or by index - `String`, `Number` or `Array`
-* `maxRows`: the maximum number of rows to load per sheet - `Number`
-* `debug`: log output from the xlrd-parser child process - `Boolean`
+* `meta` - load only workbook metadata, without iterating on rows - `Boolean`
+* `sheet` || `sheets` - load sheet(s) selectively, either by name or by index - `String`, `Number` or `Array`
+* `maxRows` - the maximum number of rows to load per sheet - `Number`
+* `debug` - log output from the xlrd-parser child process - `Boolean`
 
 #### Examples:
 
