@@ -163,6 +163,85 @@ describe('xlrd', function () {
 			}, done);
 		});
 
+		it('should parse cells with errors', function (done) {
+			async.eachSeries(sampleFiles, function (file, next) {
+				xlrd.parse(file, function (err, workbook) {
+
+					if (err) throw err;
+
+					var row1 = workbook.sheets[0].rows[1];
+					var row2 = workbook.sheets[0].rows[2];
+					var row3 = workbook.sheets[0].rows[3];
+
+					expect(row1[6].value).to.be.an.instanceof(Error).and.have.property('errorCode', '#DIV/0!');
+					expect(row2[6].value).to.be.an.instanceof(Error).and.have.property('errorCode', '#NAME?');
+					expect(row3[6].value).to.be.an.instanceof(Error).and.have.property('errorCode', '#VALUE!');
+
+					return next();
+				});
+			}, done);
+		});
+
+		it('should parse empty cells as nulls', function (done) {
+			async.eachSeries(sampleFiles, function (file, next) {
+				xlrd.parse(file, function (err, workbook) {
+
+					if (err) throw err;
+
+					workbook.sheets[0].rows.splice(1).forEach(function (row) {
+						expect(row[5].value).to.be.null;
+					});
+
+					return next();
+				});
+			}, done);
+		});
+
+		it('should parse only the selected sheet by index', function (done) {
+			async.eachSeries(sampleFiles, function (file, next) {
+				xlrd.parse(file, { sheet: 0 }, function (err, workbook) {
+					if (err) throw err;
+					expect(workbook.sheets).to.have.length(1);
+					expect(workbook.sheets[0]).to.have.property('index', 0);
+					expect(workbook.sheets[0]).to.have.property('name', 'Sheet1');
+					return next();
+				});
+			}, done);
+		});
+
+		it('should parse only the selected sheet by name', function (done) {
+			async.eachSeries(sampleFiles, function (file, next) {
+				xlrd.parse(file, { sheet: 'Sheet1' }, function (err, workbook) {
+					if (err) throw err;
+					expect(workbook.sheets).to.have.length(1);
+					expect(workbook.sheets[0]).to.have.property('index', 0);
+					expect(workbook.sheets[0]).to.have.property('name', 'Sheet1');
+					return next();
+				});
+			}, done);
+		});
+
+		it('should parse only metadata', function (done) {
+			async.eachSeries(sampleFiles, function (file, next) {
+				xlrd.parse(file, { meta: true }, function (err, workbook) {
+					if (err) throw err;
+					expect(workbook.sheets).to.be.undefined;
+					return next();
+				});
+			}, done);
+		});
+
+		it('should parse up to 10 rows on the first sheet', function (done) {
+			async.eachSeries(sampleFiles, function (file, next) {
+				xlrd.parse(file, { sheet: 0, maxRows: 10 }, function (err, workbook) {
+					if (err) throw err;
+					expect(workbook.sheets[0]).to.have.property('name', 'Sheet1');
+					expect(workbook.sheets[0].rows).to.have.length(10);
+					return next();
+				});
+			}, done);
+		});
+
 		it('should fail if the file does not exist', function (done) {
 			xlrd.parse('unknown.xlsx', function (err, workbook) {
 				expect(workbook).to.not.be.ok;

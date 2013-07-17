@@ -76,7 +76,7 @@ xlrd.stream('myfile.xlsx').on('open', function (workbook) {
 An object can be passed to the `parse` and `stream` methods to define additional options.
 
 * `meta` - loads only workbook metadata, without iterating on rows - `Boolean`
-* `sheets` - loads sheets selectively, either by name or by index - `String`, `Number` or `Array`
+* `sheet` || `sheets` - loads sheets selectively, either by name or by index - `String`, `Number` or `Array`
 * `maxRows` - the maximum number of rows to load per sheet - `Number`
 * `debug` - outputs JSON from the xlrd-parser child process - `Boolean`
 
