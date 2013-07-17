@@ -33,7 +33,7 @@ describe('xlrd', function () {
 						expect(sheet).to.equal(workbook.sheets[index]).and.to.equal(workbook.sheets[sheet.name]);
 
 						if (index === 0) {
-							expect(sheet.bounds).to.have.property('columns', 7);
+							expect(sheet.bounds).to.have.property('columns', 8);
 							expect(sheet.bounds).to.have.property('rows', 51);
 						} else if (index === 1) {
 							expect(sheet.bounds).to.have.property('columns', 3);
@@ -163,6 +163,21 @@ describe('xlrd', function () {
 			}, done);
 		});
 
+		it('should parse empty cells as nulls', function (done) {
+			async.eachSeries(sampleFiles, function (file, next) {
+				xlrd.parse(file, function (err, workbook) {
+
+					if (err) throw err;
+
+					workbook.sheets[0].rows.splice(1).forEach(function (row) {
+						expect(row[5].value).to.be.null;
+					});
+
+					return next();
+				});
+			}, done);
+		});
+
 		it('should parse cells with errors', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
 				xlrd.parse(file, function (err, workbook) {
@@ -182,15 +197,17 @@ describe('xlrd', function () {
 			}, done);
 		});
 
-		it('should parse empty cells as nulls', function (done) {
+		it('should parse cells with booleans', function (done) {
 			async.eachSeries(sampleFiles, function (file, next) {
 				xlrd.parse(file, function (err, workbook) {
 
 					if (err) throw err;
 
-					workbook.sheets[0].rows.splice(1).forEach(function (row) {
-						expect(row[5].value).to.be.null;
-					});
+					var row1 = workbook.sheets[0].rows[1];
+					var row2 = workbook.sheets[0].rows[2];
+
+					expect(row1[7].value).to.be.true;
+					expect(row2[7].value).to.be.false;
 
 					return next();
 				});
@@ -278,7 +295,12 @@ describe('xlrd', function () {
 				var events = [],
 					total = {};
 
-				xlrd.stream(file).on('data',function (data) {
+				xlrd.stream(file).on('open', function (workbook) {
+					expect(workbook).not.be.null;
+					expect(workbook.file).to.equal(file);
+					expect(workbook.meta).not.be.null;
+					expect(workbook.sheets).to.be.undefined;
+				}).on('data',function (data) {
 					events.push(data);
 				}).on('error',function (err) {
 					throw err;

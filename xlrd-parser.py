@@ -16,6 +16,8 @@ def parse_cell_value(sheet, cell):
     return ['date', year, month, day, hour, minute, second]
   elif cell.ctype == xlrd.XL_CELL_ERROR:
     return ['error', error_text_from_code[cell.value]]
+  elif cell.ctype == xlrd.XL_CELL_BOOLEAN:
+    return False if cell.value == 0 else True
   elif cell.ctype == xlrd.XL_CELL_EMPTY:
     return None
   return cell.value
