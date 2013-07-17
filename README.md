@@ -9,10 +9,17 @@ from Python to Javascript (which is surely possible).
 ## Features
 
 + Much faster and more memory efficient than most alternatives
++ Uses child processes for parallelization
 + Support for both XLS and XLSX formats
 + Can read multiple sheets
 + Can load data selectively
 + Can stream large files (tested with 250K+ rows)
++ Accurate parsing of Javascript objects, including strings, numbers, dates, booleans and errors
+
+## Limitations
+
++ Requires a Python shell (should not be a problem on Unix/Linux)
++ Does not parse formatting info
 
 ## Documentation
 
@@ -45,6 +52,44 @@ xlrd.parse('myfile.xlsx', function (err, workbook) {
 
 Cell values are parsed as strings, numbers and dates depending on the cell format.
 
+#### Returned object
+
+The returned object is either a workbook object, or an array of workbook objects if multiple files were specified as the
+source. The workbook object contains metadata about the file and a collection of sheets.
+
+The Workbook object contains the following members:
+
+* `file` - the file used to open the workbook
+* `meta` - metadata for this workbook
+* `meta.user` - the owner of the file
+* `meta.sheets` - an array of strings containing the name of sheets (available without any iteration)
+* `sheets` - the array of Sheet objects that were loaded
+
+The Sheet object contains the following members:
+
+* `index` - the ordinal position of the sheet within the workbook
+* `name` - the name of the sheet
+* `bounds` - an object specifying the data range for the sheet
+* `bounds.rows` - the total number of rows in the sheet
+* `bounds.columns` - the total number of columns in the sheet
+* `visibility` - the sheet visibility - possible values are `visible`, `hidden`, `very hidden`
+* `rows` - the array of rows that were loaded - rows are arrays of Cell objects
+
+The Cell object contains the following members:
+
+* `row` - the ordinal row number
+* `column` - the ordinal column number
+* `address` - the cell address ("A1", "B12", etc.)
+* `value` - the cell value
+
+Cell values can be of the following types:
+
+* `Number` - for numeric values
+* `Date` - for cells formatted as dates
+* `Error` - for cells with errors, such as #NAME?
+* `Boolean` - for cells formatted as booleans
+* `String` - for anything else
+
 For more details on the API, see the included unit tests.
 
 ### Streaming a large file
@@ -70,6 +115,31 @@ xlrd.stream('myfile.xlsx').on('open', function (workbook) {
 	// TODO: finishing logic here
 });
 ```
+
+#### Events
+
+The `stream` method returns a Node `EventEmitter` instance. Use `on` to listen to events and read the data continuously.
+
+* `open` - fires when a workbook is opened (sheets are not available at this point)
+
+  arguments: workbook object
+
+* `data` - fires repeatedly as data is being read from the file
+
+  arguments: a data object containing the following:
+
+  * `workbook`: the current workbook
+  * `sheet`: the current sheet instance
+  * `rows`: the current batch of rows
+
+* `error` - fires every time an error is encountered while parsing the file, the process is stopped only if a fatal
+error is encountered
+
+  arguments: the error object
+
+* `close` - fires only once, after all files and data have been read
+
+  arguments: none
 
 ### Options
 
@@ -126,23 +196,18 @@ A Python shell also needs to be available from the command line, which could be 
 
 ### 0.1.0
 
-+ can probe a workbook for metadata, without iterating on rows (options.meta)
-+ can specify which sheet to load, either by name or by index (options.sheets)
-+ can specify maximum number of rows to load (options.maxRows)
-+ parsing of errors, such as #DIV/0!, #NAME? or #VALUE!
-+ added JSDoc comments
-+ simplified and optimized Python script, emitted JSON is more compact which should further reduce memory footprint
-+ sheets are now loaded on-demand
++ can probe a workbook for metadata, without iterating on rows (`options.meta`)
++ can specify which sheet(s) to load, either by name or by index (`options.sheets`)
++ can specify a maximum number of rows to load (`options.maxRows`)
++ parsing of booleans and errors (such as #DIV/0!, #NAME? or #VALUE!)
++ new optimized Python script, emitted JSON is more compact which should further reduce memory footprint
++ sheets are always loaded on-demand (using on_demand=True)
 + better error handling
++ added JSDoc comments
 
 ### 0.0.1
 
 + initial release
-
-
-## Limitations
-
-+ Does not parse formatting info (performance impact)
 
 ## Thanks
 
