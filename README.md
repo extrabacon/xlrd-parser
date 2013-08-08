@@ -36,7 +36,7 @@ The xlrd dependency is installed automatically by downloading the latest version
 Parsing a file loads the entire file into an object structure composed of a workbook, sheets, rows and cells.
 
 ```javascript
-var xlrd = require('xlrd');
+var xlrd = require('xlrd-parser');
 
 xlrd.parse('myfile.xlsx', function (err, workbook) {
 	// Iterate on sheets
@@ -98,7 +98,7 @@ For more details on the API, see the included unit tests.
 For large files, you may want to stream the data. The stream method returns a familiar EventEmitter instance.
 
 ```javascript
-var xlrd = require('xlrd');
+var xlrd = require('xlrd-parser');
 
 xlrd.stream('myfile.xlsx').on('open', function (workbook) {
 	console.log('successfully opened ' + workbook.file);

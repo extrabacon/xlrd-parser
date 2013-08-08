@@ -1,4 +1,4 @@
-var xlrd = require('xlrd');
+var xlrd = require('xlrd-parser');
 
 xlrd.parse('myfile.xlsx', function (err, workbook) {
 	// Iterate on sheets
