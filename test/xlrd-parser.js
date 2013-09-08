@@ -3,9 +3,9 @@ var async = require('async'),
 	xlrd = require('../lib/xlrd'),
 	sampleFiles = [
 		// OO XML workbook (Excel 2003 and later)
-		'tests/sample.xlsx',
+		'test/sample.xlsx',
 		// Legacy binary format (before Excel 2003)
-		'tests/sample.xls'
+		'test/sample.xls'
 	];
 
 describe('xlrd', function () {

@@ -6,6 +6,8 @@ reading Excel files in XLS or XLSX formats.
 This module interfaces with a Python shell to stream JSON from stdout using a child process. It is not a port of xlrd
 from Python to Javascript (which is surely possible).
 
+IMPORTANT: this package is being moved over to the [pyspreadsheet](https://github.com/extrabacon/pyspreadsheet) project, which provides many new features such as writing files. It is based on the same Python/Node hybrid, but integrates with more libraries in order to deliver new features beyond xlrd. As a result, xlrd-parser is no longer under active development.
+
 ## Features
 
 + Much faster and more memory efficient than most alternatives
@@ -194,6 +196,10 @@ A Python shell also needs to be available from the command line, which could be 
 [chocolatey](http://chocolatey.org/packages/python).
 
 ## Changelog
+
+### 0.1.2
+
++ maintenance release, deprecating in favor of [pyspreadsheet](https://github.com/extrabacon/pyspreadsheet)
 
 ### 0.1.0
 
